@@ -38,7 +38,7 @@ const LocationSelector = () => {
     setStates([]);
     setCities([]);
     setLoadingStates(true);
-    axios.get(`https://crio-location-selector.onrender.com/country=${country}/states`)
+    axios.get(`https://crio-location-selector.onrender.com/countries=${country}/states`)
       .then(response => {
         setStates(response.data);
         setLoadingStates(false);
