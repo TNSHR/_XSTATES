@@ -14,7 +14,6 @@ const LocationSelector = () => {
   const [loadingCountries, setLoadingCountries] = useState(false);
   const [loadingStates, setLoadingStates] = useState(false);
   const [loadingCities, setLoadingCities] = useState(false);
-
   const [error, setError] = useState('');
 
   useEffect(() => {
@@ -24,7 +23,7 @@ const LocationSelector = () => {
         setCountries(response.data);
         setLoadingCountries(false);
       })
-      .catch(error => {
+      .catch(() => {
         setError('Error fetching countries');
         setLoadingCountries(false);
       });
@@ -43,7 +42,7 @@ const LocationSelector = () => {
         setStates(response.data);
         setLoadingStates(false);
       })
-      .catch(error => {
+      .catch(() => {
         setError('Error fetching states');
         setLoadingStates(false);
       });
@@ -60,7 +59,7 @@ const LocationSelector = () => {
         setCities(response.data);
         setLoadingCities(false);
       })
-      .catch(error => {
+      .catch(() => {
         setError('Error fetching cities');
         setLoadingCities(false);
       });
@@ -71,53 +70,49 @@ const LocationSelector = () => {
   };
 
   return (
-    <div className="location-selector">
-      <h1>Select Location</h1>
+    <div className="location-container">
+      <h1 className="title">Select Location</h1>
+      
       {error && <p className="error">{error}</p>}
-      <div className="dropdowns">
-        <div className="dropdown">
-          <label>Select Country: </label>
+
+      <div className="selectors">
+        <select value={selectedCountry} onChange={handleCountryChange}>
+          <option value="">Select Country</option>
           {loadingCountries ? (
-            <p>Loading countries...</p>
+            <option>Loading...</option>
           ) : (
-            <select value={selectedCountry} onChange={handleCountryChange}>
-              <option value="">Select Country</option>
-              {countries.map(country => (
-                <option key={country} value={country}>{country}</option>
-              ))}
-            </select>
+            countries.map(country => (
+              <option key={country} value={country}>{country}</option>
+            ))
           )}
-        </div>
-        <div className="dropdown">
-          <label>Select State: </label>
+        </select>
+
+        <select value={selectedState} onChange={handleStateChange} disabled={!selectedCountry}>
+          <option value="">Select State</option>
           {loadingStates ? (
-            <p>Loading states...</p>
+            <option>Loading...</option>
           ) : (
-            <select value={selectedState} onChange={handleStateChange} disabled={!selectedCountry}>
-              <option value="">Select State</option>
-              {states.map(state => (
-                <option key={state} value={state}>{state}</option>
-              ))}
-            </select>
+            states.map(state => (
+              <option key={state} value={state}>{state}</option>
+            ))
           )}
-        </div>
-        <div className="dropdown">
-          <label>Select City: </label>
+        </select>
+
+        <select value={selectedCity} onChange={handleCityChange} disabled={!selectedState}>
+          <option value="">Select City</option>
           {loadingCities ? (
-            <p>Loading cities...</p>
+            <option>Loading...</option>
           ) : (
-            <select value={selectedCity} onChange={handleCityChange} disabled={!selectedState}>
-              <option value="">Select City</option>
-              {cities.map(city => (
-                <option key={city} value={city}>{city}</option>
-              ))}
-            </select>
+            cities.map(city => (
+              <option key={city} value={city}>{city}</option>
+            ))
           )}
-        </div>
+        </select>
       </div>
+
       {selectedCity && selectedState && selectedCountry && (
         <div className="result">
-          <h2>You Selected {selectedCity}, {selectedState}, {selectedCountry}</h2>
+          You selected <strong>{selectedCity}</strong>, <span className="gray">{selectedState}</span>, <span className="gray">{selectedCountry}</span>
         </div>
       )}
     </div>
